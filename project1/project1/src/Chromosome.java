@@ -40,18 +40,18 @@ public class Chromosome extends ArrayList<Item> implements Comparable<Chromosome
     /**
      * Creates and returns a new child chromosome by performing the crossover operation on this chromosome and the other one that is passed in.
      * 
-     * @param other
-     * @return
+     * @param other chromosome of the other parent to cross with this chromosome
+     * @return new child chromosome
      */
     public Chromosome crossover(Chromosome other){
         Chromosome child = new Chromosome();
         for (int i = 0; i < this.size(); i++){
             
             int rand = rng.nextInt(2);
-            if (rand == 0){
+            if (rand == 0){  // if random number is zero add item from this chomosome
                 child.add(new Item(this.get(i)));
             }
-            else{
+            else{  // if random number is not zero add item from other chromosome 
                 child.add(new Item(other.get(i)));
             }
             

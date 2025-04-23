@@ -46,18 +46,18 @@ public class App {
 
         // add truck start events to event queue
         for (int i = 0; i < truckSorties; i++){
-            eventQueue.add(new Event(i * 15, i, "begins journey"));
+            eventQueue.offer(new Event(i * 15, i, "begins journey"));
         }
 
         // add truck arrive at crossing events to event queue
         for (int i = 0; i < truckSorties; i++){
-            eventQueue.add(new Event(i * 15 + 3000 / 30, i, "waits at crossing"));
+            eventQueue.offer(new Event(i * 15 + 3000 / 30, i, "waits at crossing"));
         }
 
         // add train events to event queue
         for (int i = 0; i < trainSchedule.size(); i++){
-            eventQueue.add(new Event(trainSchedule.get(i)[0], "TRAIN arrives at crossing"));
-            eventQueue.add(new Event(trainSchedule.get(i)[1], "TRAIN leaves crossing"));
+            eventQueue.offer(new Event(trainSchedule.get(i)[0], "TRAIN arrives at crossing"));
+            eventQueue.offer(new Event(trainSchedule.get(i)[1], "TRAIN leaves crossing"));
         }
 
 
@@ -80,12 +80,12 @@ public class App {
                 
                 if (eventType.contains("waits") && eventTime > truckTime){ // remove trucks from queue until new truck arrives
                     int time = truckTime + (27000 / 30);
-                    eventQueue.add(new Event(time, truckID, "completes journey")); // create complete journey event for dequeued truck
+                    eventQueue.offer(new Event(time, truckID, "completes journey")); // create complete journey event for dequeued truck
                     System.out.println(truckQueue.poll());
                 }
                 else if (eventType.contains("waits") && eventTime <= truckTime){ // truck arrives at crosisng behind queue
                     int time = eventTime + queueLength;
-                    truckQueue.add(new Event(time, eventID, "crosses crossing")); // add truck to truck queue
+                    truckQueue.offer(new Event(time, eventID, "crosses crossing")); // add truck to truck queue
                     trucks.get(eventID).updateTruckCross(time);
                     System.out.println(eventQueue.poll()); 
                     
@@ -94,7 +94,7 @@ public class App {
                     System.out.println(eventQueue.poll());
                     if (eventQueue.peek() == null){ // if there are no more events then poll trucks from queue
                         int time = truckTime + (27000 / 30);
-                        eventQueue.add(new Event(time, truckID, "completes journey")); // add truck complete journey event
+                        eventQueue.offer(new Event(time, truckID, "completes journey")); // add truck complete journey event
                         System.out.println(truckQueue.poll());
                     }
                     
@@ -121,7 +121,7 @@ public class App {
                         }
                         // add arrivals to truck queue
                         else if (currentEvent.getGlobalString().contains("waits")){
-                            truckQueue.add(currentEvent);
+                            truckQueue.offer(currentEvent);
                             System.out.println(eventQueue.poll());
                             currentEvent = eventQueue.peek();
                         }
@@ -162,7 +162,7 @@ public class App {
                     int time = currentEvent.getGlobalTime();
                     trucks.get(truckID).updateTruckCross(time);
                     time = time + (27000 / 30);
-                    eventQueue.add(new Event(time, truckID, "completes journey"));
+                    eventQueue.offer(new Event(time, truckID, "completes journey"));
                     System.out.println(eventQueue.poll());
                 }
                 // manage truck events between train arrival and leaving
@@ -184,7 +184,7 @@ public class App {
                         }
                         // add arrivals to truck queue
                         else if (currentEvent.getGlobalString().contains("waits")){
-                            truckQueue.add(currentEvent);
+                            truckQueue.offer(currentEvent);
                             System.out.println(eventQueue.poll());
                             currentEvent = eventQueue.peek();
                         }
